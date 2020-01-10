@@ -60,6 +60,9 @@ def main():
     print(query)
 
     count = db["Reviews"].find(query)
+    count2 = db["Reviews"].find(query).count()
+
+    print(count2)
 
     #save_news_into_jsons( count)
     save_news_into_json_bundle(count)
