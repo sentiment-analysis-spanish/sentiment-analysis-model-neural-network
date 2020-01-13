@@ -131,7 +131,7 @@ class SentimentAnalysisClassifier:
         ModelCheckpoint(filepath='../data/neural_network_config/temp-model.h5', save_best_only=True)]
 
         history = self.model.fit(X_train, y_train,
-                            epochs=5,
+                            epochs=25,
                             batch_size=100,
                             validation_data=(X_test, y_test),
                             callbacks=callbacks)

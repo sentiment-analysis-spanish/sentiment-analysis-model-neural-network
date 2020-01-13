@@ -72,4 +72,4 @@ if __name__ == "__main__":
 
 
 
-#tar -cJf bundle.tar.xz bundle.json
+#tar -cJf reviews-174k-bundle.tar.xz large-bundle.json
