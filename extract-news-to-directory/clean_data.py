@@ -21,7 +21,7 @@ def clean_text(text):
 def categorize (row):
   if row['rate'] > 0.5 :
       return 1
-  if row['rate'] <= 0.5 :
+  if row['rate'] < 0.5 :
       return 0
 
 def clean_news(df):
@@ -35,7 +35,7 @@ def clean_news(df):
   return df
 
 def select_rows(df):
-  df_negative = df.loc[df['sentiment'] <= 0.5]
+  df_negative = df.loc[df['sentiment'] < 0.5]
   df_positive = df.loc[df['sentiment'] > 0.5]
 
   count = len(df_negative.index)
@@ -49,8 +49,8 @@ def select_rows(df):
 
 
 def main():
-  filename = "../data/json_news_tagged_bundle/large-bundle.json"
-  output = "../data/json_news_tagged_bundle/large-bundle-clean.json"
+  filename = "../data/json_bundle_reviews/large-bundle.json"
+  output = "../data/json_bundle_reviews/large-bundle-clean.json"
   df = pd.read_json(filename)
   df = clean_news(df)
   df.to_json(output)

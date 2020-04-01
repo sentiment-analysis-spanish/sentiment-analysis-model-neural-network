@@ -110,7 +110,7 @@ class SentimentAnalysisClassifier:
         print("Saved model to disk")
 
     def create_and_train_model(self):
-        filename = "../data/json_bundle_reviews/large-bundle.json"
+        filename = "../data/json_bundle_reviews/large-bundle-clean.json"
         df = pd.read_json(filename)
         #df = self.clean_news(df)
 
