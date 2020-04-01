@@ -14,6 +14,7 @@ tensorflow = "*"
 nltk = "*"
 sklearn = "*"
 python-dotenv = "*"
+tensorflow-cpu = "*"
 
 [requires]
 python_version = "3.7"
