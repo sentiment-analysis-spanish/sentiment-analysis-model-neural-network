@@ -24,16 +24,6 @@ def createjson(item):
   out["user"] = item["user"]
   return out
 
-def save_news_into_jsons(news):
-  for item in news:
-    #item = createjson(item)
-    #print(item)
-    filename = pathout + item["id"] + "--" + item["newspaper"] + ".json"
-    
-    with open(filename, 'w',encoding="utf-8") as outfile:
-      json.dump(item, outfile, ensure_ascii=False)
-
-
 def save_news_into_json_bundle(news):
   filename = pathoutbundle + "large-bundle.json"
   out = []
@@ -47,7 +37,7 @@ def save_news_into_json_bundle(news):
 def main():
     MONGO_URL = os.getenv("database_url")
 
-    client = MongoClient(MONGO_URL)
+    client = MongoClient(MONGO_URL, unicode_decode_error_handler='ignore')
 
     db = client["reviews-scraping"]
 
@@ -56,7 +46,7 @@ def main():
     #    "$lt":     datetime.datetime.strptime("2019-12-31", '%Y-%m-%d')}
     #}
 
-    query = {}
+    query = {"rate":{"$ne" : None}}
     print(query)
 
     count = db["Reviews"].find(query)
@@ -73,3 +63,6 @@ if __name__ == "__main__":
 
 
 #tar -cJf reviews-174k-bundle.tar.xz large-bundle.json
+#tar -cJf reviews-180k-bundle-after-corona.tar.xz large-bundle-corona.json 
+
+#extract tar -xf reviews-180k-bundle-after-corona.tar.xz
