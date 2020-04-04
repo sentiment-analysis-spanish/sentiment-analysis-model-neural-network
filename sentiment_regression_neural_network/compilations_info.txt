@@ -1,0 +1,6 @@
+    
+    20200401:
+    loaded_model.compile(optimizer='adam', loss='mean_squared_error',  metrics=['mae','accuracy'])
+    
+    20200404:
+    loaded_model.compile(optimizer='adam', loss='mean_squared_error',  metrics=['mae','accuracy'])
