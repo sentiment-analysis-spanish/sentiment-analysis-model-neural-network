@@ -4,7 +4,7 @@ import pickle
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 from keras.optimizers import Adam
-from classifier import SentimentAnalysisClassifier
+from cleaner import Cleaner
 
 maxlen = 100
 def main():
@@ -26,7 +26,7 @@ def main():
     # evaluate loaded model on test data
     loaded_model.compile(optimizer='adam', loss='mean_squared_error',  metrics=['mae','accuracy'])
 
-    clean = SentimentAnalysisClassifier().clean_text
+    clean = Cleaner().clean_text
     sentence_test = ["IMPORTANTE: El restaurante cierra los días de partido o eventos.  El confort y la elegancia son uno de los dúos más apreciados por los sibaritas de todo el mundo. Pero Chamartín ha sabido convertirlo en un muy distinguido trío, puesto que suma la gastronomía asiática a esta lujosa ecuación.  Y es que Zen Market es mucho más que un restaurante, puesto que su calidad raya la perfección. No es casualidad que Ignacio García de Vinuesa y su equipo de profesionales le hayan dado forma a este rincón que también es deportista: se encuentra en una zona exclusiva del estadio Santiago Bernabéu.  Si pensabas que habías probado un pato lacado auténtico, desde eltenedor.es te pedimos que reserves una mesa y disfrutes de un auténtico pato lacado en caviar o quizás un bogavante salteado con sal y pimienta Sechuan. Si ya los probaste, reserva en cualquier caso y para cualquier ocasión. Zen Market es toda una experiencia. ¡No te lo puedes perder!",
     "me gusta mucho, todo está bien", 
     "Los platos bien.. Comida divertida. El servicio regular, tardaron en servir el café 20 minutos",

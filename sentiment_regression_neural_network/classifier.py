@@ -7,14 +7,13 @@ from nltk.corpus import stopwords
 from sklearn.preprocessing import MultiLabelBinarizer
 from keras.preprocessing.text import Tokenizer
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Embedding, Flatten, GlobalMaxPool1D, Dropout, Conv1D
+from keras.layers import Dense, Activation, Embedding, GRU, Flatten, GlobalMaxPool1D, Dropout, Conv1D
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCheckpoint
 
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.sequence import pad_sequences
 
-nltk.download('stopwords')
 import pandas as pd
 import glob
 import re
@@ -25,46 +24,12 @@ import pickle
 
 class SentimentAnalysisClassifier:
     def __init__(self):
-        self.REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
-        self.BAD_SYMBOLS_RE = re.compile('[^\w\s]')
-        self.STOPWORDS = set(stopwords.words('spanish'))
-        self.tokenizer = None
+        with open('../data/neural_network_config/tokenizer.pickle', 'rb') as handle:
+            self.tokenizer = pickle.load(handle)
         self.multilabel_binarizer = MultiLabelBinarizer()
         self.model = None
         self.maxlen = 100
 
-
-    def clean_text(self, text):
-        text = text.lower() # lowercase text
-        text = self.REPLACE_BY_SPACE_RE.sub(' ', text) # replace REPLACE_BY_SPACE_RE symbols by space in text. substitute the matched string in REPLACE_BY_SPACE_RE with space.
-        text = self.BAD_SYMBOLS_RE.sub('', text) # remove symbols which are in BAD_SYMBOLS_RE from text. substitute the matched string in BAD_SYMBOLS_RE with nothing. 
-    #    text = re.sub(r'\W+', '', text)
-        text = ' '.join(word for word in text.split() if word not in self.STOPWORDS) # remove stopwors from text
-        return text
-
-    def clean_news(self, df):
-        print("cleaning the text data")
-        df = df.reset_index(drop=True)
-        df.dropna(subset=['rate'], inplace=True)
-        df['content'] = df['content'].apply(self.clean_text)
-        df['content'] = df['content'].str.replace('\d+', '')
-        df['sentiment'] = df.apply (lambda row: self.categorize(row), axis=1)
-        return df
-
-    def categorize (self, row):
-        if row['rate'] > 0.5 :
-            return 1
-        if row['rate'] <= 0.5 :
-            return 0
-            
-    def load_tokenizer(self, sentences):
-        print("loading toikenizer")
-        self.tokenizer = Tokenizer(num_words=5000)
-        self.tokenizer.fit_on_texts(sentences)
-
-        # saving tokenizer
-        with open('../data/neural_network_config/tokenizer.pickle', 'wb') as handle:
-            pickle.dump(self.tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     def create_train_and_test_data(self, sentences, y):
         print("separating data into test data and train data")
@@ -88,13 +53,19 @@ class SentimentAnalysisClassifier:
         #model.add(GlobalMaxPool1D())
         #model.add(Dense(output_size, activation='sigmoid'))
 
+        #self.model = Sequential()
+        #self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
+        #self.model.add(Dropout(0.1))
+        #self.model.add(Conv1D(filter_length, 3, padding='valid', activation='relu', strides=1))
+        #self.model.add(GlobalMaxPool1D())
+        #self.model.add(Dense(1, activation='sigmoid'))
+
         self.model = Sequential()
         self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
-        self.model.add(Dropout(0.1))
-        self.model.add(Conv1D(filter_length, 3, padding='valid', activation='relu', strides=1))
-        self.model.add(GlobalMaxPool1D())
+        self.model.add(GRU(128, return_sequences=True))
+        self.model.add(GRU(128))
         self.model.add(Dense(1, activation='sigmoid'))
-
+        
         self.model.compile(optimizer='adam',
               loss='binary_crossentropy',
               metrics=['accuracy'])
@@ -116,9 +87,6 @@ class SentimentAnalysisClassifier:
 
         y = df.sentiment.values
         sentences = df['content'].values
-
-
-        self.load_tokenizer(sentences)
 
         X_train, X_test, y_train, y_test = self.create_train_and_test_data(sentences, y)
 
