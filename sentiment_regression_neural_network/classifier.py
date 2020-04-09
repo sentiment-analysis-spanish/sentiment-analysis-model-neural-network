@@ -53,18 +53,18 @@ class SentimentAnalysisClassifier:
         #model.add(GlobalMaxPool1D())
         #model.add(Dense(output_size, activation='sigmoid'))
 
-        #self.model = Sequential()
-        #self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
-        #self.model.add(Dropout(0.1))
-        #self.model.add(Conv1D(filter_length, 3, padding='valid', activation='relu', strides=1))
-        #self.model.add(GlobalMaxPool1D())
-        #self.model.add(Dense(1, activation='sigmoid'))
-
         self.model = Sequential()
         self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
-        self.model.add(GRU(128, return_sequences=True))
-        self.model.add(GRU(128))
+        self.model.add(Dropout(0.1))
+        self.model.add(Conv1D(filter_length, 3, padding='valid', activation='relu', strides=1))
+        self.model.add(GlobalMaxPool1D())
         self.model.add(Dense(1, activation='sigmoid'))
+
+        #self.model = Sequential()
+        #self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
+        #self.model.add(GRU(128, return_sequences=True))
+        #self.model.add(GRU(128))
+        #self.model.add(Dense(1, activation='sigmoid'))
         
         self.model.compile(optimizer='adam',
               loss='binary_crossentropy',
