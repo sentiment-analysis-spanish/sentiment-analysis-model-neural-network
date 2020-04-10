@@ -53,11 +53,9 @@ class Cleaner:
         df_positive = df.loc[df['sentiment'] > 0.5]
 
         count = len(df_negative.index)
-        print(count)
         df_positive_selected = df_positive.sample(count)
         frames = [df_negative, df_positive_selected]
         df_concat = pd.concat(frames)
-        print(df_concat)
         return df_concat
 
     def categorize (self, row):
@@ -81,9 +79,10 @@ class Cleaner:
         output = "../data/json_bundle_reviews/large-bundle-clean.json"
         
         df=  pd.read_json(filename)
-        print(df)
 
         df = self.clean_news(df)
+        print(df)
+
         df.to_json(output,force_ascii=False)
         
         sentences = df['content'].values
