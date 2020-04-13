@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 .vscode
 .idea
+large-bundle-clean.json 
+large-bundle*
 # C extensions
 *.so
 node_modules
