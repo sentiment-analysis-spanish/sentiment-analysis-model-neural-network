@@ -15,6 +15,7 @@ nltk = "*"
 sklearn = "*"
 python-dotenv = "*"
 tensorflow-cpu = "*"
+sentiment-analysis-spanish = "==0.0.2"
 
 [requires]
 python_version = "3.7"
