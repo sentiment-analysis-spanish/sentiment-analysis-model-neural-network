@@ -1,35 +1,30 @@
 #tar -cJf filename.tar.xz /path/to/folder_or_file ...
 #https://blog.mimacom.com/text-classification/
 #https://machinelearningmastery.com/regression-tutorial-keras-deep-learning-library-python/
-from keras.datasets import imdb
-import nltk
-from nltk.corpus import stopwords
+
 from sklearn.preprocessing import MultiLabelBinarizer
 from keras.preprocessing.text import Tokenizer
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Embedding, GRU, Flatten, GlobalMaxPool1D, Dropout, Conv1D
+from keras.layers import Dense, Activation, Embedding, MaxPooling1D, Flatten, GlobalMaxPool1D, Dropout, Conv1D
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCheckpoint
 
-from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.sequence import pad_sequences
 
 import pandas as pd
-import glob
-import re
 import numpy as np
 import pickle
 
 
 
-class SentimentAnalysisClassifier:
+class DomesticViolenceNewsClassifier:
     def __init__(self):
+        print("loading toikenizer")
         with open('../data/neural_network_config/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
         self.multilabel_binarizer = MultiLabelBinarizer()
         self.model = None
-        self.maxlen = 500
-
+        self.maxlen = 250
 
     def create_train_and_test_data(self, sentences, y):
         print("separating data into test data and train data")
@@ -56,7 +51,11 @@ class SentimentAnalysisClassifier:
         self.model = Sequential()
         self.model.add(Embedding(vocab_size, 20, input_length=self.maxlen))
         self.model.add(Dropout(0.1))
-        self.model.add(Conv1D(filter_length, 3, padding='valid', activation='relu', strides=1))
+        self.model.add(Conv1D(filter_length, 5, activation='relu'))
+        self.model.add(Conv1D(filter_length, 5, activation='relu'))
+        self.model.add(MaxPooling1D(5))
+        self.model.add(Conv1D(filter_length, 5, activation='relu'))
+        self.model.add(Conv1D(filter_length, 5, activation='relu'))
         self.model.add(GlobalMaxPool1D())
         self.model.add(Dense(1, activation='sigmoid'))
 
@@ -99,7 +98,7 @@ class SentimentAnalysisClassifier:
         ModelCheckpoint(filepath='../data/neural_network_config/temp-model.h5', save_best_only=True)]
 
         history = self.model.fit(X_train, y_train,
-                            epochs=40,
+                            epochs=10,
                             batch_size=100,
                             validation_data=(X_test, y_test),
                             callbacks=callbacks)
@@ -115,5 +114,5 @@ class SentimentAnalysisClassifier:
 
 
 if __name__== "__main__":
-    classifier = SentimentAnalysisClassifier()
+    classifier = DomesticViolenceNewsClassifier()
     classifier.create_and_train_model()

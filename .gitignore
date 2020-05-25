@@ -4,8 +4,12 @@ __pycache__/
 *$py.class
 .vscode
 .idea
+node_modules/
 large-bundle-clean.json 
 large-bundle*
+positive_reviews.json
+negative_reviews.json
+large-bundle-clean.json
 # C extensions
 *.so
 node_modules
