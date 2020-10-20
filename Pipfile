@@ -12,6 +12,7 @@ pandas = "*"
 numpy = "*"
 keras-metrics = "*"
 jupyter = "*"
+tensorflow = "*"
 
 [requires]
 python_version = "3.8"
