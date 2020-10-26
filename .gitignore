@@ -40,7 +40,9 @@ large-bundle.json
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-
+large-bundle-clean.json
+ngram_vectorizer.pickle
+temp-model.h5
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

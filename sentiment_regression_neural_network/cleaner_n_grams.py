@@ -11,7 +11,7 @@ import pandas as pd
 import re
 import numpy as np
 import pickle
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 
 
@@ -51,8 +51,8 @@ class Cleaner_ngrams:
             return 0
 
     def load_tokenizer(self, sentences):
-        print("loading CountVectorizer")
-        self.ngram_vectorizer = CountVectorizer(binary=True, ngram_range=(1, 2))
+        print("loading TfidfVectorizer")
+        self.ngram_vectorizer = CountVectorizer(analyzer="word", ngram_range=(2, 2), max_features=3000)
         self.ngram_vectorizer.fit(sentences)
 
         # saving tokenizer
